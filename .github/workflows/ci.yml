@@ -20,11 +20,8 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Garantir permissões
-        run: chmod +x ./node_modules/.bin/eslint || true
-
       - name: Rodar lint
-        run: ./node_modules/.bin/eslint .
+        run: npx eslint .
 
       - name: Rodar testes
-        run: npm test
+        run: npx jest
