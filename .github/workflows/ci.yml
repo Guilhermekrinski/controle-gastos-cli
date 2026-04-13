@@ -18,7 +18,10 @@ jobs:
           node-version: 18
 
       - name: Instalar dependências
-        run: npm install
+        run: npm ci
+
+      - name: Ajustar permissões
+        run: chmod -R +x node_modules/.bin
 
       - name: Rodar lint
         run: npx eslint .
