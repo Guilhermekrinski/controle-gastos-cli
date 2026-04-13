@@ -1,0 +1,21 @@
+{
+  "name": "controle-gastos-cli",
+  "version": "1.0.0",
+  "description": "Aplicação CLI para controle de gastos",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint .",
+    "start": "node src/app.js"
+  },
+  "author": "SEU NOME",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^10.2.0",
+    "jest": "^30.3.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": []
+}
