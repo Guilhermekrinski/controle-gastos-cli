@@ -1,73 +1,70 @@
-# Controle de Gastos CLI
+# 💸 GastoZero — API REST
 
-## 📌 Problema
+API REST para controle de gastos pessoais com persistência em banco de dados na nuvem (Supabase/PostgreSQL), deploy contínuo e testes automatizados.
 
-Muitas pessoas têm dificuldade em controlar seus gastos diários, o que pode levar à desorganização financeira e até ao endividamento.
+## 👥 Integrantes do Grupo
 
-## 💡 Solução
+| Nome | Matrícula |
+|------|-----------|
+| Guilherme Krinski | 22504358 |
+| Gabriel Ortiga | (matrícula do Gabriel) |
+| Ruan Costa | 22501713 |
 
-Esta aplicação permite registrar, listar e calcular gastos de forma simples utilizando o terminal, ajudando o usuário a manter controle sobre suas finanças.
+## 🔗 Links
 
-## 👥 Público-alvo
+- **Repositório:** https://github.com/Guilhermekrinski/controle-gastos-cli
+- **Deploy:** https://controle-gastos-cli-fwnf.onrender.com
 
-Pessoas que desejam organizar suas finanças pessoais de forma prática e rápida.
+## 📌 Sobre o Projeto
 
-## ⚙️ Funcionalidades
-
-* Adicionar gasto
-* Listar gastos
-* Ver total de gastos
+Aplicação que permite registrar, listar e calcular gastos pessoais via API REST. Os dados são persistidos em PostgreSQL hospedado no Supabase.
 
 ## 🚀 Tecnologias
 
-* Node.js
-* Jest (testes automatizados)
-* ESLint (análise de código)
+| Categoria | Tecnologia |
+|-----------|-----------|
+| Runtime | Node.js 20 |
+| Framework | Express |
+| Banco de Dados | Supabase (PostgreSQL) |
+| Testes | Jest + Supertest |
+| Lint | ESLint |
+| CI/CD | GitHub Actions |
+| Deploy | Render |
 
-## 📥 Instalação
+## ⚙️ Endpoints
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/` | Health check |
+| GET | `/gastos` | Lista todos os gastos |
+| POST | `/gastos` | Adiciona um gasto |
+| GET | `/gastos/total` | Soma total dos gastos |
+| DELETE | `/gastos/:id` | Remove um gasto |
+
+## 📥 Como rodar localmente
 
 ```bash
+git clone https://github.com/Guilhermekrinski/controle-gastos-cli.git
+cd controle-gastos-cli
 npm install
+cp .env.example .env
+# Edite o .env com suas credenciais do Supabase
+npm start
 ```
 
-## ▶️ Execução
+## 🗄️ Banco de Dados
 
-```bash
-node src/app.js add "Almoço" 25
-node src/app.js list
-node src/app.js total
+```sql
+CREATE TABLE gastos (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  descricao TEXT NOT NULL,
+  valor NUMERIC(10, 2) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 ```
 
 ## 🧪 Testes
 
 ```bash
 npm test
-```
-
-## 🧹 Lint
-
-```bash
-npm run lint
-```
-
-## 🔢 Versão
-
-1.0.0
-
-## 👨‍💻 Autor
-
-Guilherme Krinski
-
-## 🔗 Repositório
-
-https://github.com/Guilhermekrinski/controle-gastos-cli
-
-## 📸 Exemplo de uso
-
-```bash
-node src/app.js add "Almoço" 25
-node src/app.js list
-[ { descricao: 'Almoço', valor: 25 } ]
-node src/app.js total
-Total: 25
 ```
