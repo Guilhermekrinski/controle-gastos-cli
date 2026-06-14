@@ -1,51 +1,51 @@
-const fs = require('fs');
-const path = './data/gastos.json';
+const express = require('express');
+const { createClient } = require('@supabase/supabase-js');
 
-function carregarGastos() {
-  if (!fs.existsSync(path)) return [];
-  return JSON.parse(fs.readFileSync(path));
-}
+const app = express();
+app.use(express.json());
 
-function salvarGastos(gastos) {
-  fs.writeFileSync(path, JSON.stringify(gastos, null, 2));
-}
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
 
-function adicionarGasto(descricao, valor) {
-  if (valor <= 0) throw new Error('Valor inválido');
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Controle de Gastos API 🚀' });
+});
 
-  const gastos = carregarGastos();
-  gastos.push({ descricao, valor });
-  salvarGastos(gastos);
-}
+app.get('/gastos', async (req, res) => {
+  const { data, error } = await supabase
+    .from('gastos')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) return res.status(500).json({ error: error.message });
+  res.json(data);
+});
 
-function listarGastos() {
-  return carregarGastos();
-}
-
-function totalGastos() {
-  return carregarGastos().reduce((acc, g) => acc + g.valor, 0);
-}
-
-module.exports = {
-  adicionarGasto,
-  listarGastos,
-  totalGastos
-};
-
-// CLI
-if (require.main === module) {
-  const args = process.argv.slice(2);
-
-  if (args[0] === 'add') {
-    adicionarGasto(args[1], Number(args[2]));
-    console.log('Gasto adicionado!');
+app.post('/gastos', async (req, res) => {
+  const { descricao, valor } = req.body;
+  if (!descricao || valor === undefined) {
+    return res.status(400).json({ error: 'descricao e valor são obrigatórios' });
   }
+  const { data, error } = await supabase
+    .from('gastos')
+    .insert([{ descricao, valor: Number(valor) }])
+    .select();
+  if (error) return res.status(500).json({ error: error.message });
+  res.status(201).json(data[0]);
+});
 
-  if (args[0] === 'list') {
-    console.log(listarGastos());
-  }
+app.get('/gastos/total', async (req, res) => {
+  const { data, error } = await supabase.from('gastos').select('valor');
+  if (error) return res.status(500).json({ error: error.message });
+  const total = data.reduce((acc, g) => acc + Number(g.valor), 0);
+  res.json({ total });
+});
 
-  if (args[0] === 'total') {
-    console.log('Total:', totalGastos());
-  }
-}
+app.delete('/gastos/:id', async (req, res) => {
+  const { error } = await supabase.from('gastos').delete().eq('id', req.params.id);
+  if (error) return res.status(500).json({ error: error.message });
+  res.json({ message: 'Gasto removido com sucesso' });
+});
+
+module.exports = app;
