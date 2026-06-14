@@ -50,4 +50,14 @@ app.delete('/gastos/:id', async (req, res) => {
   res.json({ message: 'Gasto removido com sucesso' });
 });
 
+app.get('/gastos/:id', async (req, res) => {
+  const { data, error } = await getSupabase()
+    .from('gastos')
+    .select('*')
+    .eq('id', req.params.id);
+  if (error) return res.status(500).json({ error: error.message });
+  if (!data.length) return res.status(404).json({ error: 'Gasto não encontrado' });
+  res.json(data[0]);
+});
+
 module.exports = app;
