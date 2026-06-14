@@ -9,6 +9,7 @@ API REST para controle de gastos pessoais com persistência em banco de dados na
 | Guilherme Krinski | 22504358 |
 | Gabriel Ortiga | (matrícula do Gabriel) |
 | Ruan Costa | 22501713 |
+| Pedro Saldanha | 22509813 |
 
 ## 🔗 Links
 
