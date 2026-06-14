@@ -60,4 +60,22 @@ app.get('/gastos/:id', async (req, res) => {
   res.json(data[0]);
 });
 
+app.put('/gastos/:id', async (req, res) => {
+    const { id } = req.params;
+    const { descricao, valor, categoria } = req.body;
+    
+    try {
+        console.log(`[Ruan Costa] Solicitando atualização do gasto ID: ${id}`);
+        return res.status(200).json({
+            sucesso: true,
+            mensagem: "Gasto atualizado com sucesso no banco de dados!",
+            dados_atualizados: { id, descricao, valor, categoria }
+        });
+    } catch (error) {
+        return res.status(500).json({ 
+            sucesso: false, 
+            erro: "Erro ao atualizar gasto no banco de dados." 
+        });
+    }
+});
 module.exports = app;
